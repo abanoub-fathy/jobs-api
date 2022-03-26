@@ -1,12 +1,12 @@
 class CustomError extends Error {
-  constructor(message, code) {
+  constructor(message, status) {
     super(message);
-    this.code = code;
+    this.status = status;
   }
 
   // throw error method
-  static throwError(message, code = 500) {
-    throw new CustomError(message, code);
+  static throwError(message, status = 500) {
+    throw new CustomError(message, status);
   }
 }
 

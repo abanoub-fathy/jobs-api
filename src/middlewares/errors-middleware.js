@@ -1,5 +1,6 @@
 const errorMiddleware = (err, req, res, next) => {
-  return res.status(err.code).send({ error: err.message });
+  console.log(err.status);
+  return res.status(err.status || 400).send({ error: err.message });
 };
 
 module.exports = errorMiddleware;

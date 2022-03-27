@@ -62,5 +62,14 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
+// delete user sensitive data before sending it back
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  delete user.tokens;
+
+  return user;
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;

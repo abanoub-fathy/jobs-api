@@ -15,7 +15,12 @@ const signUpUser = async (req, res) => {
 
 // login user
 const loginUser = async (req, res) => {
-  res.send("login user");
+  let user = await User.loginUser(req.body.email, req.body.password);
+  const token = await user.generateAuthToken();
+  res.status(200).send({
+    user,
+    token,
+  });
 };
 
 module.exports = {

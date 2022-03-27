@@ -71,5 +71,28 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
+// Login user
+userSchema.statics.loginUser = async function (email, password) {
+  // check that email and password are provided
+  if (!email || !email.trim() || !password) {
+    return throwError("You should provide an email and password", 400);
+  }
+
+  // find the user by email
+  const user = await User.findOne({ email: email.trim() });
+  if (!user) {
+    return throwError("Email  not found", 400);
+  }
+
+  // check the correctnece of the password
+  const isPassCorrect = await bcrypt.compare(password, user.password);
+  if (!isPassCorrect) {
+    return throwError("Password is not correct", 400);
+  }
+
+  // return the user
+  return user;
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;

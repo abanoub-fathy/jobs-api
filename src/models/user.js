@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password Should be at least 6 chars"],
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 // hash user password before saving to the db
@@ -38,12 +46,19 @@ userSchema.pre("save", async function () {
   }
 });
 
-// generate Auth token
-userSchema.methods.generateAuthToken = function () {
+// generate and save Auth token
+userSchema.methods.generateAuthToken = async function () {
+  // Generate the token
   const user = this;
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1 day",
   });
+
+  // save the token to the DB
+  user.tokens.push({ token });
+  await user.save();
+
+  // Send the token back
   return token;
 };
 

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 const { throwError } = require("../errors/custom-error");
 
 const userSchema = new mongoose.Schema({
@@ -24,6 +25,16 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password Should be at least 6 chars"],
   },
+});
+
+// hash user password before saving to the db
+userSchema.pre("save", async function () {
+  const user = this;
+  if (user.isModified("password")) {
+    // hash user password
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashedPassword;
+  }
 });
 
 const User = mongoose.model("User", userSchema);

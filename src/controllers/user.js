@@ -5,7 +5,11 @@ const User = require("../models/user");
 const signUpUser = async (req, res) => {
   const user = new User(req.body);
   await user.save();
-  res.status(201).send(user);
+  const token = user.generateAuthToken();
+  res.status(201).send({
+    user,
+    token,
+  });
 };
 
 // login user

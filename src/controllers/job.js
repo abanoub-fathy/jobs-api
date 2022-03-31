@@ -1,8 +1,11 @@
 const { throwError } = require("../errors/custom-error");
+const Job = require("../models/job");
 
 // Create a jobs
 const createJob = async (req, res) => {
-  res.send({ process: "Create job", job: req.body });
+  const job = new Job({ ...req.body, createdBy: req.user._id });
+  await job.save();
+  res.status(201).send(job);
 };
 
 // find all jobs

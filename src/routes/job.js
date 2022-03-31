@@ -4,18 +4,18 @@ const jobController = require("../controllers/job");
 const router = Router();
 
 // create a job
-router.post("/", jobController.createJob);
+router.post("/", auth, jobController.createJob);
 
 // get all jobs
 router.get("/", auth, jobController.findAllJobs);
 
 // find single job
-router.get("/:id", jobController.findSingleJob);
+router.get("/:id", auth, jobController.findSingleJob);
 
 // update a job
-router.patch("/:id", jobController.updateJob);
+router.patch("/:id", auth, jobController.updateJob);
 
 // delete a job
-router.delete("/:id", jobController.deleteJob);
+router.delete("/:id", auth, jobController.deleteJob);
 
 module.exports = router;

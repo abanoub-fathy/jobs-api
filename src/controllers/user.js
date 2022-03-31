@@ -23,7 +23,27 @@ const loginUser = async (req, res) => {
   });
 };
 
+// logout user from existing device
+const logoutUser = async (req, res) => {
+  // delete the user token used to make the logout request
+  req.user.tokens = req.user.tokens.filter(
+    (tokenObj) => tokenObj.token !== req.token
+  );
+  await req.user.save();
+  res.send();
+};
+
+// logout from all devices
+const logoutUserFromAllDevices = async (req, res) => {
+  // delete all tokens
+  req.user.tokens = [];
+  await req.user.save();
+  res.send();
+};
+
 module.exports = {
   signUpUser,
   loginUser,
+  logoutUser,
+  logoutUserFromAllDevices,
 };

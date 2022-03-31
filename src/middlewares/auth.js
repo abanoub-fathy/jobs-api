@@ -19,7 +19,9 @@ const auth = async (req, res, next) => {
       throw new Error();
     }
 
+    // return back the user info and the token
     req.user = user;
+    req.token = token;
     next();
   } catch (e) {
     throwError("You need to sign in", 401);

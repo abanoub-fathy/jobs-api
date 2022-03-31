@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const auth = require("../middlewares/auth");
 const jobController = require("../controllers/job");
 const router = Router();
 
@@ -6,7 +7,7 @@ const router = Router();
 router.post("/", jobController.createJob);
 
 // get all jobs
-router.get("/", jobController.findAllJobs);
+router.get("/", auth, jobController.findAllJobs);
 
 // find single job
 router.get("/:id", jobController.findSingleJob);

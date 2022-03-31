@@ -10,7 +10,8 @@ const createJob = async (req, res) => {
 
 // find all jobs
 const findAllJobs = async (req, res) => {
-  res.send("all jobs");
+  const jobs = await Job.find({ createdBy: req.user._id }).sort("createdAt");
+  res.status(200).send({ jobs, count: jobs.length });
 };
 
 // find single job

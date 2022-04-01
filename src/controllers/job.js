@@ -34,10 +34,32 @@ const findSingleJob = async (req, res) => {
 
 // update a job
 const updateJob = async (req, res) => {
-  res.send({
-    process: "Update job",
-    data: req.body,
-  });
+  const {
+    params: { id: jobId },
+    user: { _id: userId },
+  } = req;
+
+  // validate the update fields
+  const validUpdates = ["status", "company", "position"];
+  const updates = Object.keys(req.body);
+  const isValidUpadteProcess = updates.every((update) =>
+    validUpdates.includes(update)
+  );
+  // if the update operation is invalid
+  if (!isValidUpadteProcess) throwError("Invalid Update Process", 400);
+
+  // find the job to be updated
+  const job = await Job.findOne({ _id: jobId, createdBy: userId });
+  if (!job) throwError("Job not Found", 404);
+
+  // update the job
+  updates.forEach((update) => (job[update] = req.body[update]));
+
+  // save the chnages
+  await job.save();
+
+  // return the response back
+  res.status(200).send(job);
 };
 
 // delete job

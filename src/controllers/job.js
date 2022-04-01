@@ -16,7 +16,20 @@ const findAllJobs = async (req, res) => {
 
 // find single job
 const findSingleJob = async (req, res) => {
-  res.send(`Single job: ${req.params.id}`);
+  // destructure the id of the job and the id of the user made the request
+  const {
+    params: { id: jobId },
+    user: { _id: userId },
+  } = req;
+
+  // searching for the job
+  const job = await Job.findOne({ _id: jobId, createdBy: userId });
+  if (!job) {
+    throwError("Job not found", 404);
+  }
+
+  // return the job back
+  res.status(200).send(job);
 };
 
 // update a job

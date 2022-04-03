@@ -2,10 +2,17 @@ require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const connectToDB = require("./db/db");
+
+// extra security packages
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
 const rateLimiter = require("express-rate-limit");
+
+// swagger
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml");
+const swaggerUI = require("swagger-ui-express");
 
 // configure express
 const app = express();
@@ -23,9 +30,15 @@ app.use(
   })
 );
 
+// main route redirect
+app.get("/", (req, res) => {
+  res.redirect("/api/docs");
+});
+
 // routes
 app.use("/api/v1/users", require("./routes/user"));
 app.use("/api/v1/jobs", require("./routes/job"));
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // middlewares
 app.use(require("./middlewares/not-found"));
@@ -48,10 +61,3 @@ const start = async () => {
 };
 
 start();
-
-/*
- ** - cors
- ** - helmet
- ** - xss-clean
- ** - express-rate-limit
- */

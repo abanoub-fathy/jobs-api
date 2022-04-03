@@ -1,0 +1,400 @@
+openapi: 3.0.0
+
+info:
+  title: Jobs-API
+
+  description: Simple RESTful API that allow user to have an account and create jobs to hire people.
+
+  contact:
+    email: aop4ever@gmail.com
+    name: Abanoub Fathy
+    url: https://linkedin.com/in/abanoub-fathy
+
+  version: "1.0"
+
+servers:
+  - url: https://bebo-jops-api.herokuapp.com/api/v1
+
+    variables: {}
+
+paths:
+  /users/login:
+    post:
+      tags:
+        - User
+
+      summary: login
+
+      operationId: login
+
+      parameters: []
+
+      requestBody:
+        description: ""
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginrequest"
+
+            example:
+              email: pop@gmail.com
+
+              password: "123456"
+
+        required: true
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+      security: []
+
+  /users/register:
+    post:
+      tags:
+        - User
+
+      summary: Register User
+
+      operationId: RegisterUser
+
+      parameters: []
+
+      requestBody:
+        description: ""
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+
+            example:
+              name: Abanoub
+
+              email: pop@gmail.com
+
+              password: "123456"
+
+        required: true
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+      security: []
+
+  /users/logout:
+    post:
+      tags:
+        - User
+
+      summary: logout
+
+      operationId: logout
+
+      parameters: []
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+  /users/logout/all:
+    post:
+      tags:
+        - User
+
+      summary: logout all
+
+      operationId: logoutall
+
+      parameters: []
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+  /jobs:
+    post:
+      tags:
+        - Job
+
+      summary: Create a job
+
+      operationId: Createajob
+
+      parameters: []
+
+      requestBody:
+        description: ""
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateajobRequest"
+
+            example:
+              company: Google
+
+              position: backend developer
+
+        required: true
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+    get:
+      tags:
+        - Job
+
+      summary: Find All Jobs
+
+      operationId: FindAllJobs
+
+      parameters: []
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The job ID
+
+    get:
+      tags:
+        - Job
+
+      summary: Find Single Job
+
+      operationId: FindSingleJob
+
+      parameters: []
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+    patch:
+      tags:
+        - Job
+
+      summary: Update Single Job
+
+      operationId: UpdateSingleJob
+
+      parameters: []
+
+      requestBody:
+        description: ""
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSingleJobRequest"
+
+            example:
+              company: bebo
+
+              position: UI/UX
+
+              status: in consideration
+
+        required: true
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+    delete:
+      tags:
+        - Job
+
+      summary: Delete Single Job
+
+      operationId: DeleteSingleJob
+
+      parameters: []
+
+      responses:
+        "200":
+          description: ""
+
+          headers: {}
+
+      deprecated: false
+
+components:
+  schemas:
+    loginrequest:
+      title: loginrequest
+
+      required:
+        - email
+
+        - password
+
+      type: object
+
+      properties:
+        email:
+          type: string
+
+        password:
+          type: string
+
+      example:
+        email: mon@gmail.com
+
+        password: "123456"
+
+    RegisterUserRequest:
+      title: RegisterUserRequest
+
+      required:
+        - name
+
+        - email
+
+        - password
+
+      type: object
+
+      properties:
+        name:
+          type: string
+
+        email:
+          type: string
+
+        password:
+          type: string
+
+      example:
+        name: Abanoub
+
+        email: pop@gmail.com
+
+        password: "123456"
+
+    CreateNewJobRequest:
+      title: CreateNewJobRequest
+
+      required:
+        - name
+
+      type: object
+
+      properties:
+        name:
+          type: string
+
+      example:
+        name: this is new job
+
+    CreateajobRequest:
+      title: CreateajobRequest
+
+      required:
+        - company
+
+        - position
+
+      type: object
+
+      properties:
+        company:
+          type: string
+
+        position:
+          type: string
+
+      example:
+        company: xceed
+
+        position: French call center
+
+    UpdateSingleJobRequest:
+      title: UpdateSingleJobRequest
+
+      required:
+        - company
+
+        - position
+
+        - status
+
+      type: object
+
+      properties:
+        company:
+          type: string
+
+        position:
+          type: string
+
+        status:
+          type: string
+
+      example:
+        company: bebo
+
+        position: UI/UX
+
+        status: in consideration
+
+  securitySchemes:
+    bearer:
+      type: http
+
+      scheme: bearer
+
+security:
+  - bearer: []
+
+tags:
+  - name: User
+
+    description: "User related endpoints"
+
+  - name: Job
+
+    description: "Job related endpoints"
